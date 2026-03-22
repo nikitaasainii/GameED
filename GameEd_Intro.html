@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameEd — Welcome</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d2b5e;
+    --teal: #ff6b4a;
+    --teal-light: rgba(255,107,74,0.15);
+    --teal-dark: #e8502e;
+    --purple: #ff8c6b;
+    --purple-light: rgba(255,140,107,0.15);
+    --text: #ffffff;
+    --text-soft: rgba(255,255,255,0.65);
+    --border: rgba(255,255,255,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .blob { position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0; }
+  .blob-1 { width:500px; height:500px; background:rgba(30,80,180,0.35); top:-150px; left:-150px; }
+  .blob-2 { width:450px; height:450px; background:rgba(10,50,140,0.4); bottom:-100px; right:-100px; }
+
+  .bubbles { position:fixed; inset:0; z-index:1; pointer-events:none; }
+  .bub {
+    position:absolute; border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.03);
+    animation:floatup linear infinite;
+  }
+  @keyframes floatup {
+    0%{ transform:translateY(100vh); opacity:0; }
+    10%{ opacity:1; } 90%{ opacity:0.4; }
+    100%{ transform:translateY(-80px); opacity:0; }
+  }
+
+  .deco-fish { position:fixed; font-size:16px; pointer-events:none; z-index:1; animation:swimby linear infinite; opacity:0.22; }
+  @keyframes swimby { 0%{ left:-50px; } 100%{ left:calc(100vw + 50px); } }
+
+  .wave-svg { position:fixed; bottom:0; left:0; width:100%; height:100px; z-index:1; pointer-events:none; }
+
+  .screen {
+    position:relative; z-index:10;
+    display:flex; align-items:center; justify-content:center;
+    gap:80px;
+    width:min(1100px, 95vw);
+    padding:40px 20px;
+  }
+
+  /* Donna side */
+  .donna-side {
+    display:flex; flex-direction:column; align-items:center; flex-shrink:0;
+    animation:slideLeft 0.9s cubic-bezier(0.34,1.4,0.64,1) forwards;
+  }
+  @keyframes slideLeft { from{opacity:0;transform:translateX(-40px);} to{opacity:1;transform:translateX(0);} }
+
+  .donna-wrap {
+    position:relative; width:300px; height:300px; overflow:visible;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .donna-ring {
+    position:absolute; width:275px; height:275px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,140,60,0.15) 0%, transparent 70%);
+    animation:pulse-ring 3.5s ease-in-out infinite;
+  }
+  @keyframes pulse-ring { 0%,100%{transform:scale(1);opacity:0.5;} 50%{transform:scale(1.07);opacity:0.9;} }
+
+  .donna-svg {
+    width:268px; height:268px;
+    animation:donna-bob 4s ease-in-out infinite;
+    filter:drop-shadow(0 16px 36px rgba(220,140,60,0.35));
+    position:relative; z-index:2;
+  }
+  @keyframes donna-bob {
+    0%,100%{transform:translateY(0) rotate(-2deg);}
+    50%{transform:translateY(-15px) rotate(2deg);}
+  }
+
+  .speech {
+    position:absolute;
+    top: 30px;
+    left: -140px;
+    background:rgba(255,255,255,0.1);
+    border:2px solid rgba(255,255,255,0.2); border-radius:20px 20px 4px 20px;
+    padding:11px 20px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.2); backdrop-filter:blur(10px);
+    white-space:nowrap;
+    z-index:5;
+  }
+  .speech p { font-size:15px; font-weight:700; color:#ffffff; }
+  .speech p span { color:var(--teal); }
+
+
+  /* Content side */
+  .content {
+    display:flex; flex-direction:column;
+    width:min(400px, 90vw);
+    animation:slideRight 0.9s cubic-bezier(0.34,1.4,0.64,1) forwards;
+  }
+  @keyframes slideRight { from{opacity:0;transform:translateX(40px);} to{opacity:1;transform:translateX(0);} }
+
+  .logo-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,107,74,0.18); border-radius:50px;
+    padding:6px 14px; margin-bottom:18px; width:fit-content;
+  }
+  .logo-pill-dot { width:8px; height:8px; border-radius:50%; background:var(--teal); animation:blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .logo-pill span { font-size:12px; font-weight:800; color:var(--teal-dark); letter-spacing:1px; text-transform:uppercase; }
+
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(40px,5.5vw,58px); color:#ffffff; line-height:1.05; margin-bottom:12px; }
+  h1 .highlight { color:#ff8c6b; position:relative; }
+  h1 .highlight::after { content:''; position:absolute; bottom:3px; left:0; right:0; height:4px; border-radius:2px; background:#ff6b4a; opacity:0.2; }
+
+  .btns { display:flex; flex-direction:column; gap:13px; }
+  .btn {
+    width:100%; padding:17px 24px; border-radius:14px; border:none;
+    font-family:'Nunito',sans-serif; font-size:16px; font-weight:800;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;
+    transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    letter-spacing:0.3px;
+  }
+  .btn:active{transform:scale(0.97) !important;}
+  .btn-primary { background:#ff6b4a; color:white; box-shadow:0 6px 20px rgba(255,107,74,0.4); }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,107,74,0.55);background:#e8502e;}
+  .btn-secondary { background:rgba(255,255,255,0.08); color:#ffffff; border:2px solid rgba(255,107,74,0.5); box-shadow:0 2px 8px rgba(0,0,0,0.2); }
+  .btn-secondary:hover{transform:translateY(-3px);border-color:#ff6b4a;box-shadow:0 8px 24px rgba(255,107,74,0.25);color:#ff8c6b; background:rgba(255,107,74,0.12);}
+
+  .terms { margin-top:18px; font-size:11px; color:var(--text-soft); text-align:center; line-height:1.6; }
+  .terms a { color:#ff8c6b; text-decoration:none; font-weight:700; }
+
+  .toast {
+    position:fixed; bottom:80px; left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:rgba(255,255,255,0.12); border:1.5px solid rgba(255,107,74,0.4); border-radius:50px; backdrop-filter:blur(12px);
+    padding:12px 24px; font-family:'Nunito',sans-serif; font-weight:700; font-size:14px;
+    color:#ffffff; box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    z-index:999; opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="bubbles" id="bubbles"></div>
+
+<svg class="wave-svg" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,100 L0,100 Z" fill="rgba(255,255,255,0.04)"/>
+  <path d="M0,75 C360,40 720,90 1080,55 C1260,38 1380,70 1440,80 L1440,100 L0,100 Z" fill="rgba(255,255,255,0.03)"/>
+</svg>
+
+<div class="screen">
+
+  <!-- Donna -->
+  <div class="donna-side">
+    <div class="donna-wrap">
+      <div class="donna-ring"></div>
+
+      <svg class="donna-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Orange-yellow gradient: warm centre fading to deeper orange edges -->
+          <radialGradient id="bodyG" cx="42%" cy="38%" r="62%">
+            <stop offset="0%"   stop-color="#fde87a"/>
+            <stop offset="35%"  stop-color="#f9c13a"/>
+            <stop offset="70%"  stop-color="#f0920e"/>
+            <stop offset="100%" stop-color="#d4720a"/>
+          </radialGradient>
+          <!-- Arm tip gradient — slightly deeper orange -->
+          <radialGradient id="tipG" cx="50%" cy="80%" r="60%">
+            <stop offset="0%"   stop-color="#f9c13a"/>
+            <stop offset="100%" stop-color="#d4720a"/>
+          </radialGradient>
+          <!-- Blush -->
+          <radialGradient id="blushG" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"  stop-color="#f07040" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#f07040" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="soft3"><feGaussianBlur stdDeviation="3"/></filter>
+          <filter id="soft5"><feGaussianBlur stdDeviation="5"/></filter>
+        </defs>
+
+        <!--
+          Classic 5-point star shape — sharp enough to read as a star,
+          rounded enough to feel cute and soft.
+          Using a proper star polygon with slightly rounded joins.
+        -->
+
+        <!-- Shadow/depth layer behind -->
+        <path d="M110 12 C116 30 120 48 126 60 C140 56 158 50 174 60 C180 66 170 80 160 90 C168 100 178 114 172 128 C166 140 150 134 138 128 C134 144 128 164 118 172 C108 178 102 160 110 146 C98 160 92 178 82 172 C72 166 66 146 62 128 C50 134 34 140 28 128 C22 114 32 100 40 90 C30 80 20 66 26 60 C42 50 60 56 74 60 C80 48 104 30 110 12Z"
+          fill="#c86808" opacity="0.15" transform="translate(3,5)"
+          filter="url(#soft5)"
+        />
+
+        <!-- Main star body -->
+        <path d="M110 12 C116 30 120 48 126 60 C140 56 158 50 174 60 C180 66 170 80 160 90 C168 100 178 114 172 128 C166 140 150 134 138 128 C134 144 128 164 118 172 C108 178 102 160 110 146 C98 160 92 178 82 172 C72 166 66 146 62 128 C50 134 34 140 28 128 C22 114 32 100 40 90 C30 80 20 66 26 60 C42 50 60 56 74 60 C80 48 104 30 110 12Z"
+          fill="url(#bodyG)"
+          stroke="#c86808"
+          stroke-width="2.5"
+          stroke-linejoin="round"
+        />
+
+        <!-- Inner soft highlight -->
+        <ellipse cx="106" cy="88" rx="32" ry="28" fill="#fef0a0" opacity="0.28" filter="url(#soft3)"/>
+
+        <!-- White highlight streaks on arms — one per arm tip -->
+        <!-- Top arm -->
+        <ellipse cx="110" cy="34" rx="4" ry="11" fill="white" opacity="0.3" transform="rotate(0 110 110)"/>
+        <!-- Top-right arm -->
+        <ellipse cx="110" cy="34" rx="3.5" ry="9" fill="white" opacity="0.25" transform="rotate(72 110 110)"/>
+        <!-- Bottom-right arm -->
+        <ellipse cx="110" cy="34" rx="3.5" ry="9" fill="white" opacity="0.25" transform="rotate(144 110 110)"/>
+        <!-- Bottom-left arm -->
+        <ellipse cx="110" cy="34" rx="3.5" ry="9" fill="white" opacity="0.25" transform="rotate(216 110 110)"/>
+        <!-- Top-left arm -->
+        <ellipse cx="110" cy="34" rx="4" ry="10" fill="white" opacity="0.28" transform="rotate(288 110 110)"/>
+
+        <!-- Rosy cheeks -->
+        <ellipse cx="88"  cy="112" rx="12" ry="8" fill="url(#blushG)" filter="url(#soft3)"/>
+        <ellipse cx="132" cy="112" rx="12" ry="8" fill="url(#blushG)" filter="url(#soft3)"/>
+
+        <!-- Eyes: happy closed crescent arcs -->
+        <path d="M91 96 Q99 88 107 96"  stroke="#3a2010" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M113 96 Q121 88 129 96" stroke="#3a2010" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Mouth: soft simple smile, no teeth -->
+        <path d="M100 110 Q110 120 120 110" stroke="#3a2010" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      </svg>
+      <!-- Speech bubble -->
+      <div class="speech">
+        <p>Hi! I'm <span style="color:#ff8c6b;">Donna!</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="logo-pill">
+      <div class="logo-pill-dot"></div>
+      <span>For ages 2 to 5</span>
+    </div>
+
+    <h1>Welcome to <span class="highlight">GameEd!</span></h1>
+
+    <div class="btns">
+      <button class="btn btn-primary" onclick="showToast('Welcome back! Logging you in...')">Login</button>
+      <button class="btn btn-secondary" onclick="showToast('Let\'s set up your account!')">Create Account</button>
+    </div>
+
+    <p class="terms">By continuing you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const bc=document.getElementById('bubbles');
+  for(let i=0;i<16;i++){
+    const b=document.createElement('div');
+    b.className='bub';
+    const s=Math.random()*18+8;
+    b.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*14+10}s;animation-delay:${Math.random()*14}s;`;
+    bc.appendChild(b);
+  }
+  function showToast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+  }
+</script>
+</body>
+</html>
