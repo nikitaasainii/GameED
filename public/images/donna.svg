@@ -1,0 +1,27 @@
+<svg class="donna-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bodyG" cx="42%" cy="38%" r="62%">
+      <stop offset="0%" stop-color="#fde87a"/><stop offset="35%" stop-color="#f9c13a"/>
+      <stop offset="70%" stop-color="#f0920e"/><stop offset="100%" stop-color="#d4720a"/>
+    </radialGradient>
+    <radialGradient id="blushG" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f07040" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#f07040" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft3"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="soft5"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <path d="M110 12 C116 30 120 48 126 60 C140 56 158 50 174 60 C180 66 170 80 160 90 C168 100 178 114 172 128 C166 140 150 134 138 128 C134 144 128 164 118 172 C108 178 102 160 110 146 C98 160 92 178 82 172 C72 166 66 146 62 128 C50 134 34 140 28 128 C22 114 32 100 40 90 C30 80 20 66 26 60 C42 50 60 56 74 60 C80 48 104 30 110 12Z" fill="#c86808" opacity="0.15" transform="translate(3,5)" filter="url(#soft5)"/>
+  <path d="M110 12 C116 30 120 48 126 60 C140 56 158 50 174 60 C180 66 170 80 160 90 C168 100 178 114 172 128 C166 140 150 134 138 128 C134 144 128 164 118 172 C108 178 102 160 110 146 C98 160 92 178 82 172 C72 166 66 146 62 128 C50 134 34 140 28 128 C22 114 32 100 40 90 C30 80 20 66 26 60 C42 50 60 56 74 60 C80 48 104 30 110 12Z" fill="url(#bodyG)" stroke="#c86808" stroke-width="2.5" stroke-linejoin="round"/>
+  <ellipse cx="106" cy="88" rx="32" ry="28" fill="#fef0a0" opacity="0.28" filter="url(#soft3)"/>
+  <ellipse cx="110" cy="34" rx="4" ry="11" fill="white" opacity="0.3"/>
+  <ellipse cx="110" cy="34" rx="3.5" ry="9" fill="white" opacity="0.25" transform="rotate(72 110 110)"/>
+  <ellipse cx="110" cy="34" rx="3.5" ry="9" fill="white" opacity="0.25" transform="rotate(144 110 110)"/>
+  <ellipse cx="110" cy="34" rx="3.5" ry="9" fill="white" opacity="0.25" transform="rotate(216 110 110)"/>
+  <ellipse cx="110" cy="34" rx="4" ry="10" fill="white" opacity="0.28" transform="rotate(288 110 110)"/>
+  <ellipse cx="88" cy="112" rx="12" ry="8" fill="url(#blushG)" filter="url(#soft3)"/>
+  <ellipse cx="132" cy="112" rx="12" ry="8" fill="url(#blushG)" filter="url(#soft3)"/>
+  <path d="M91 96 Q99 88 107 96" stroke="#3a2010" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M113 96 Q121 88 129 96" stroke="#3a2010" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M100 110 Q110 120 120 110" stroke="#3a2010" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+</svg>
