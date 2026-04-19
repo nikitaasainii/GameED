@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { saveGameProgress } from "@/lib/progress"; // Added progress import
 
 const TOTAL_QUESTIONS    = 5;
 const FISH_SPEED         = 3200;
@@ -76,7 +77,7 @@ function Donna({ state }) {
       <ellipse cx="88"  cy="112" rx="12" ry="8" fill="url(#bG)"/>
       <ellipse cx="132" cy="112" rx="12" ry="8" fill="url(#bG)"/>
       {/* Left eye */}
-      {happy ? <path d="M91 92 Q99 84 107 92" stroke="#3a2010" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
+      {happy ? <path d="M91 92 Q96 84 104 92" stroke="#3a2010" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
              : wrong ? <path d="M91 100 Q99 108 107 100" stroke="#3a2010" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
              : <path d="M91 96 Q99 88 107 96" stroke="#3a2010" strokeWidth="3.5" fill="none" strokeLinecap="round"/>}
       {/* Right eye */}
@@ -139,15 +140,32 @@ export default function CountTheFish() {
     return () => clearInterval(interval);
   }, [qIndex, phase]);
 
-  function handleAnswer(option) {
+  // Integrated saveGameProgress here
+  async function handleAnswer(option) {
     if (selected !== null) return;
     setSelected(option);
     const correct = option === currentQ.count;
     setIsCorrect(correct);
-    if (correct) { setScore(s => s + 1); setDonnaState("happy"); setFeedback("Great job!"); }
-    else { setDonnaState("wrong"); setFeedback(`It was ${currentQ.count}!`); }
-    setTimeout(() => {
-      if (qIndex + 1 >= TOTAL_QUESTIONS) setPhase("result");
+    
+    // We calculate the final potential score immediately for the backend call
+    const updatedScore = correct ? score + 1 : score;
+    
+    if (correct) { 
+      setScore(s => s + 1); 
+      setDonnaState("happy"); 
+      setFeedback("Great job!"); 
+    }
+    else { 
+      setDonnaState("wrong"); 
+      setFeedback(`It was ${currentQ.count}!`); 
+    }
+
+    setTimeout(async () => {
+      if (qIndex + 1 >= TOTAL_QUESTIONS) {
+        setPhase("result");
+        // Save to DB when game completes
+        await saveGameProgress("Math Lagoon", updatedScore);
+      }
       else setQIndex(i => i + 1);
     }, 1800);
   }

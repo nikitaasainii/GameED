@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { playClick } from "@/lib/sound"; // Import added
 
 export default function IntroScreen() {
   return (
@@ -61,15 +62,15 @@ export default function IntroScreen() {
 
           {/* INTERACTIVE BUTTONS */}
           <div className="flex flex-col gap-4 w-full max-w-sm mx-auto md:mx-0">
-            <Link href="/login" className="w-full">
-            <button className="w-full py-4 bg-[#ff6b4a] hover:bg-[#ff5a36] text-white font-black text-lg rounded-2xl shadow-[0_8px_0_rgb(200,70,40)] hover:shadow-[0_4px_0_rgb(200,70,40)] hover:translate-y-[4px] transition-all active:translate-y-[6px] active:shadow-none">
-              Login
-            </button>
+            <Link href="/login" onClick={() => playClick()} className="w-full"> {/* Sound added */}
+              <button className="w-full py-4 bg-[#ff6b4a] hover:bg-[#ff5a36] text-white font-black text-lg rounded-2xl shadow-[0_8px_0_rgb(200,70,40)] hover:shadow-[0_4px_0_rgb(200,70,40)] hover:translate-y-[4px] transition-all active:translate-y-[6px] active:shadow-none">
+                Login
+              </button>
             </Link>
-            <Link href="/signup">
-            <button className="w-full py-4 bg-white/5 border-2 border-white/10 text-white font-bold text-lg rounded-2xl hover:bg-white/10 transition-all backdrop-blur-sm active:scale-95">
-              Create Account
-            </button>
+            <Link href="/signup" onClick={() => playClick()}> {/* Sound added */}
+              <button className="w-full py-4 bg-white/5 border-2 border-white/10 text-white font-bold text-lg rounded-2xl hover:bg-white/10 transition-all backdrop-blur-sm active:scale-95">
+                Create Account
+              </button>
             </Link>
           </div>
         </div>
