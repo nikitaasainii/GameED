@@ -124,7 +124,31 @@ export default function BubbleLetters() {
     const expectedLetter = word[popped.length];
 
     if (bubble.letter === expectedLetter) {
-      playClick();
+    const newPopped = [...popped, bubble.id];
+    setPopped(newPopped);
+
+    if (newPopped.length === word.length) {
+    // Word complete — no click sound, play animal sound instead
+      setShells(s => s + 1);
+      setDonnaHappy(true);
+      setFeedback("correct");
+      playAnimalSound(word);
+
+      setTimeout(async () => {
+        if (qIndex + 1 < TOTAL_QUESTIONS) {
+          setQIndex(q => q + 1);
+        } else {
+          setPhase("result");
+          await saveGameProgress("Bubble Letters", shells + 1);
+        }
+        setFeedback(null);
+      }, 3000);
+    }
+    else {
+    // Mid-word — still play click
+    playClick();
+  }
+}
       const newPopped = [...popped, bubble.id];
       setPopped(newPopped);
 
@@ -146,11 +170,11 @@ export default function BubbleLetters() {
           setFeedback(null);
         }, 2500);
       }
-    } else {
-      setFeedback("wrong");
-      setDonnaHappy(false);
-      setTimeout(() => setFeedback(null), 1000);
-    }
+      else {
+        setFeedback("wrong");
+        setDonnaHappy(false);
+        setTimeout(() => setFeedback(null), 1000);
+      }
   }
 
   if (phase === "intro") return (
@@ -296,4 +320,5 @@ export default function BubbleLetters() {
       </div>
     </main>
   );
+
 }
