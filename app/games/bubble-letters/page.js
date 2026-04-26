@@ -101,8 +101,12 @@ export default function BubbleLetters() {
     const wrong = getWrongLetters(word, 6);
     const all = shuffle([...letters, ...wrong]);
     const positioned = all.map((letter, i) => ({
-      id: i, letter, x: 8 + (i % 5) * 18, y: 15 + Math.floor(i / 5) * 22,
-      isCorrect: letters.includes(letter), popped: false,
+      id: i,
+      letter,
+      x: 8 + (i % 5) * 18,
+      y: 15 + Math.floor(i / 5) * 22,
+      isCorrect: letters.includes(letter),
+      popped: false,
     }));
     setBubbles(positioned);
     setPopped([]);
@@ -118,47 +122,22 @@ export default function BubbleLetters() {
   }
 
   function handlePop(bubble) {
-    if (feedback) return;
+    if (feedback === "correct") return; // lock during transition
     if (popped.includes(bubble.id)) return;
+
     const { word } = current;
     const expectedLetter = word[popped.length];
 
     if (bubble.letter === expectedLetter) {
-    const newPopped = [...popped, bubble.id];
-    setPopped(newPopped);
-
-    if (newPopped.length === word.length) {
-    // Word complete — no click sound, play animal sound instead
-      setShells(s => s + 1);
-      setDonnaHappy(true);
-      setFeedback("correct");
-      playAnimalSound(word);
-
-      setTimeout(async () => {
-        if (qIndex + 1 < TOTAL_QUESTIONS) {
-          setQIndex(q => q + 1);
-        } else {
-          setPhase("result");
-          await saveGameProgress("Bubble Letters", shells + 1);
-        }
-        setFeedback(null);
-      }, 3000);
-    }
-    else {
-    // Mid-word — still play click
-    playClick();
-  }
-}
       const newPopped = [...popped, bubble.id];
       setPopped(newPopped);
+      playAnimalSound(word); // play on every correct letter
 
       if (newPopped.length === word.length) {
+        // Word complete
         setShells(s => s + 1);
         setDonnaHappy(true);
         setFeedback("correct");
-
-        // 🔊 Play animal sound on correct word
-        playAnimalSound(word);
 
         setTimeout(async () => {
           if (qIndex + 1 < TOTAL_QUESTIONS) {
@@ -168,13 +147,15 @@ export default function BubbleLetters() {
             await saveGameProgress("Bubble Letters", shells + 1);
           }
           setFeedback(null);
-        }, 2500);
+        }, 3000);
+
       }
-      else {
-        setFeedback("wrong");
-        setDonnaHappy(false);
-        setTimeout(() => setFeedback(null), 1000);
-      }
+    } else {
+      // Wrong order — Donna sad
+      setDonnaHappy(false);
+      setFeedback("wrong");
+      setTimeout(() => setFeedback(null), 1000);
+    }
   }
 
   if (phase === "intro") return (
@@ -272,7 +253,7 @@ export default function BubbleLetters() {
               <DonnaSVG happy={donnaHappy}/>
             </div>
             {feedback === "correct" && (
-              <span className="text-[#ff8c6b] text-xs font-black animate-bounce uppercase">Correct! 🔊</span>
+              <span className="text-[#ff8c6b] text-xs font-black animate-bounce uppercase">Amazing! 🎉</span>
             )}
             {feedback === "wrong" && (
               <span className="text-white/40 text-xs font-black uppercase">Try Again!</span>
@@ -304,12 +285,14 @@ export default function BubbleLetters() {
               <button
                 key={bubble.id}
                 onClick={() => handlePop(bubble)}
-                disabled={isPopped}
+                disabled={isPopped || !bubble.isCorrect}
                 style={{ left: `${bubble.x}%`, top: `${bubble.y}%` }}
                 className={`absolute w-14 h-14 rounded-full border-2 font-black text-xl transition-all duration-300 transform
                   ${isPopped
                     ? "opacity-0 scale-0 pointer-events-none"
-                    : "bg-white/10 border-white/20 text-white hover:scale-125"
+                    : bubble.isCorrect
+                      ? "bg-white/10 border-white/20 text-white hover:scale-125 cursor-pointer"
+                      : "bg-white/5 border-white/10 text-white/20 cursor-not-allowed opacity-40"
                   }`}
               >
                 {bubble.letter}
@@ -320,5 +303,4 @@ export default function BubbleLetters() {
       </div>
     </main>
   );
-
 }
