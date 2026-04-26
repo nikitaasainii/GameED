@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image"; // For actual pictures
+import Image from "next/image";
 import { playClick } from "@/lib/sound";
 import { saveGameProgress } from "@/lib/progress";
 
-// ─── DONNA SVG ────────────────────────────────────────────────────────────────
 const DonnaSVG = ({ happy }) => (
   <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
     <defs>
@@ -40,7 +39,6 @@ const DonnaSVG = ({ happy }) => (
   </svg>
 );
 
-// ─── GAME DATA (Point to your images folder) ──────────────────────────────────
 const WORDS = [
   { word: "CAT", animal: "Cat", src: "/images/cat.gif" },
   { word: "DOG", animal: "Dog", src: "/images/dog.gif" },
@@ -54,6 +52,19 @@ const WORDS = [
   { word: "BUG", animal: "Bug", src: "/images/bug.gif" },
 ];
 
+const ANIMAL_SOUNDS = {
+  CAT: "/sounds/meow.mp3",
+  DOG: "/sounds/bark.mp3",
+  HEN: "/sounds/hen.mp3",
+  PIG: "/sounds/pig.mp3",
+  OWL: "/sounds/owl.mp3",
+  FOX: "/sounds/fox.mp3",
+  RAT: "/sounds/rat.mp3",
+  BAT: "/sounds/bat.mp3",
+  ANT: "/sounds/ant.mp3",
+  BUG: "/sounds/bug.mp3",
+};
+
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
@@ -63,9 +74,16 @@ function getWrongLetters(word, count) {
   return shuffle(pool).slice(0, count);
 }
 
+function playAnimalSound(word) {
+  const soundSrc = ANIMAL_SOUNDS[word];
+  if (!soundSrc) return;
+  const audio = new Audio(soundSrc);
+  audio.play().catch(() => {});
+}
+
 export default function BubbleLetters() {
   const TOTAL_QUESTIONS = 5;
-  const [phase, setPhase] = useState("intro"); // Start with Intro
+  const [phase, setPhase] = useState("intro");
   const [questions] = useState(() => shuffle(WORDS).slice(0, TOTAL_QUESTIONS));
   const [qIndex, setQIndex] = useState(0);
   const [popped, setPopped] = useState([]);
@@ -114,13 +132,16 @@ export default function BubbleLetters() {
         setShells(s => s + 1);
         setDonnaHappy(true);
         setFeedback("correct");
-        
+
+        // 🔊 Play animal sound on correct word
+        playAnimalSound(word);
+
         setTimeout(async () => {
           if (qIndex + 1 < TOTAL_QUESTIONS) {
             setQIndex(q => q + 1);
           } else {
             setPhase("result");
-            await saveGameProgress("Bubble Letters", shells + 1); 
+            await saveGameProgress("Bubble Letters", shells + 1);
           }
           setFeedback(null);
         }, 1800);
@@ -132,7 +153,6 @@ export default function BubbleLetters() {
     }
   }
 
-  // ── INTRO SCREEN ──
   if (phase === "intro") return (
     <main className="relative min-h-screen w-full bg-[#0d2b5e] overflow-hidden flex flex-col items-center justify-center p-6">
       <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none"/>
@@ -142,26 +162,41 @@ export default function BubbleLetters() {
         <div className="inline-flex items-center gap-2 bg-[#4a90ff]/20 border border-[#4a90ff]/30 rounded-full px-4 py-2 mb-4">
           <span className="text-[10px] font-black text-[#8eb9ff] uppercase tracking-widest">English Cove</span>
         </div>
-        <h1 className="text-5xl text-white font-bold mb-3" style={{ fontFamily:"var(--font-fredoka)" }}>Bubble <span className="text-[#ff8c6b]">Letters!</span></h1>
-        <p className="text-white/50 text-sm font-medium mb-8 leading-relaxed">Pop the floating bubbles in the right order to spell the animal name!</p>
+        <h1 className="text-5xl text-white font-bold mb-3" style={{ fontFamily:"var(--font-fredoka)" }}>
+          Bubble <span className="text-[#ff8c6b]">Letters!</span>
+        </h1>
+        <p className="text-white/50 text-sm font-medium mb-8 leading-relaxed">
+          Pop the floating bubbles in the right order to spell the animal name!
+        </p>
         <div className="flex flex-col gap-3 w-full mb-10">
-          {[{ icon:"🐾", text:"Look at the animal picture" },{ icon:"🫧", text:"Find the letters in bubbles" },{ icon:"👆", text:"Pop them in order to spell" }].map((item, i) => (
+          {[
+            { icon:"🐾", text:"Look at the animal picture" },
+            { icon:"🫧", text:"Find the letters in bubbles" },
+            { icon:"👆", text:"Pop them in order to spell" },
+          ].map((item, i) => (
             <div key={i} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-left">
               <span className="text-2xl">{item.icon}</span>
               <span className="text-white/60 text-sm font-medium">{item.text}</span>
             </div>
           ))}
         </div>
-        <button onClick={startGame} className="w-full py-5 bg-[#ff6b4a] text-white font-black text-xl rounded-[2rem] shadow-xl shadow-[#ff6b4a]/20 hover:bg-[#ff5a36] hover:-translate-y-1 transition-all active:scale-[0.98]" style={{ fontFamily: "var(--font-fredoka)" }}>Start Spelling!</button>
+        <button
+          onClick={startGame}
+          className="w-full py-5 bg-[#ff6b4a] text-white font-black text-xl rounded-[2rem] shadow-xl shadow-[#ff6b4a]/20 hover:bg-[#ff5a36] hover:-translate-y-1 transition-all active:scale-[0.98]"
+          style={{ fontFamily: "var(--font-fredoka)" }}
+        >
+          Start Spelling!
+        </button>
       </div>
     </main>
   );
 
-  // ── RESULT SCREEN ──
   if (phase === "result") return (
     <main className="relative min-h-screen w-full bg-[#0d2b5e] overflow-hidden flex flex-col items-center justify-center p-6">
       <div className="w-32 h-32 mb-6 animate-bounce"><DonnaSVG happy={true}/></div>
-      <h1 className="text-5xl text-white font-bold mb-2 text-center" style={{ fontFamily: "var(--font-fredoka)" }}>Spelling Star!</h1>
+      <h1 className="text-5xl text-white font-bold mb-2 text-center" style={{ fontFamily: "var(--font-fredoka)" }}>
+        Spelling Star!
+      </h1>
       <p className="text-white/50 mb-10">You're a master of words!</p>
       <div className="flex items-center gap-3 bg-white/5 border border-[#ff8c6b]/20 rounded-2xl px-10 py-6 mb-10">
         <span className="text-4xl">🐚</span>
@@ -171,47 +206,67 @@ export default function BubbleLetters() {
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full max-w-xs">
-        <button onClick={startGame} className="w-full py-5 bg-[#ff6b4a] text-white font-black text-xl rounded-[2rem] shadow-xl hover:bg-[#ff5a36] transition-all">Play Again</button>
-        <Link href="/map" onClick={() => playClick()} className="text-center py-4 text-white/30 hover:text-white text-sm font-bold transition-all uppercase tracking-widest">Back to Map</Link>
+        <button
+          onClick={startGame}
+          className="w-full py-5 bg-[#ff6b4a] text-white font-black text-xl rounded-[2rem] shadow-xl hover:bg-[#ff5a36] transition-all"
+        >
+          Play Again
+        </button>
+        <Link href="/map" onClick={() => playClick()} className="text-center py-4 text-white/30 hover:text-white text-sm font-bold transition-all uppercase tracking-widest">
+          Back to Map
+        </Link>
       </div>
     </main>
   );
 
   return (
     <main className="relative min-h-screen w-full bg-[#0d2b5e] overflow-hidden flex flex-col items-center p-6">
-      <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-100px] left-[-100px] w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] pointer-events-none"/>
       <nav className="w-full flex justify-between items-center z-20 mb-4">
         <Link href="/map" onClick={() => playClick()}>
-          <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-white/60 text-xs font-black uppercase tracking-widest transition-all">Back</button>
+          <button className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-white/60 text-xs font-black uppercase tracking-widest transition-all">
+            Back
+          </button>
         </Link>
         <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 font-black text-sm">
-           <span className="text-[#ff8c6b]">{shells}</span> <span className="text-white/40 uppercase text-[10px]">shells</span>
+          <span className="text-[#ff8c6b]">{shells}</span>
+          <span className="text-white/40 uppercase text-[10px]">shells</span>
         </div>
       </nav>
 
       <div className="w-full max-w-xl z-10 flex flex-col items-center gap-6">
         <div className="w-full flex items-end justify-between gap-4 mt-4">
-          {/* ANIMAL PICTURE - Pointing to your src */}
           <div className="flex flex-col items-center gap-2">
             <div className="relative w-52 h-52 md:w-60 md:h-60 bg-white/5 border border-white/10 rounded-[2.5rem] p-6 flex items-center justify-center shadow-lg overflow-hidden">
-               <Image src={current.src} alt={current.animal} fill className="object-contain p-4" />
+              <Image src={current.src} alt={current.animal} fill className="object-contain p-4"/>
             </div>
             <span className="text-white/50 text-[10px] font-black uppercase tracking-[0.2em]">{current.animal}</span>
           </div>
 
           <div className="flex flex-col items-center gap-2">
             <div className={`w-32 h-32 transition-transform duration-300 ${donnaHappy ? "scale-110" : "scale-100"}`}>
-              <DonnaSVG happy={donnaHappy} />
+              <DonnaSVG happy={donnaHappy}/>
             </div>
-            {feedback === "correct" && <span className="text-[#ff8c6b] text-xs font-black animate-bounce uppercase">Correct!</span>}
-            {feedback === "wrong" && <span className="text-white/40 text-xs font-black uppercase">Try Again!</span>}
+            {feedback === "correct" && (
+              <span className="text-[#ff8c6b] text-xs font-black animate-bounce uppercase">Correct! 🔊</span>
+            )}
+            {feedback === "wrong" && (
+              <span className="text-white/40 text-xs font-black uppercase">Try Again!</span>
+            )}
           </div>
         </div>
 
         {/* Word Display */}
         <div className="flex gap-2">
           {current.word.split("").map((letter, i) => (
-            <div key={i} className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center text-2xl font-black transition-all ${popped.length > i ? "bg-[#ff6b4a] border-[#ff6b4a] text-white" : "bg-white/5 border-white/10 text-white/10"}`}>
+            <div
+              key={i}
+              className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center text-2xl font-black transition-all ${
+                popped.length > i
+                  ? "bg-[#ff6b4a] border-[#ff6b4a] text-white"
+                  : "bg-white/5 border-white/10 text-white/10"
+              }`}
+            >
               {popped.length > i ? letter : ""}
             </div>
           ))}
@@ -228,7 +283,10 @@ export default function BubbleLetters() {
                 disabled={isPopped}
                 style={{ left: `${bubble.x}%`, top: `${bubble.y}%` }}
                 className={`absolute w-14 h-14 rounded-full border-2 font-black text-xl transition-all duration-300 transform
-                  ${isPopped ? "opacity-0 scale-0 pointer-events-none" : "bg-white/10 border-white/20 text-white hover:scale-125"}`}
+                  ${isPopped
+                    ? "opacity-0 scale-0 pointer-events-none"
+                    : "bg-white/10 border-white/20 text-white hover:scale-125"
+                  }`}
               >
                 {bubble.letter}
               </button>
