@@ -23,13 +23,13 @@ const SEASONS = [
     { id: "sound", title: "Sound", image: "/images/winter-sound.gif", fact: "Winter wind blows!", bgColor: "#0a5a9a", isSound: true, soundFile: "/sound/winter.mp3", soundLabel: "Wind" },
   ]},
   { id: "spring", name: "Spring", color: "#208040", glowColor: "rgba(32,128,64,0.3)", borderColor: "#50c870", cards: [
-    { id: "season", title: "Season", image: "/images/spring-season.gif", fact: "Flowers are blooming!", bgColor: "#208040" },
+    { id: "season", title: "Season", image: "/images/spring-weather.gif", fact: "Flowers are blooming!", bgColor: "#208040" },
     { id: "clothes", title: "Clothes", image: "/images/spring-clothes.png", fact: "Wear light jackets!", bgColor: "#309050" },
-    { id: "food", title: "Food", image: "/images/spring-food.png", fact: "Fresh fruit salads!", bgColor: "#40a060" },
+    { id: "food", title: "Food", image: "/images/spring-food.gif", fact: "Fresh fruit salads!", bgColor: "#40a060" },
     { id: "sound", title: "Sound", image: "/images/weather/spring-sound.png", fact: "Birds are singing!", bgColor: "#107030", isSound: true, soundFile: "/sound/spring.mp3", soundLabel: "Birds" },
   ]},
   { id: "rainy", name: "Rainy", color: "#304888", glowColor: "rgba(48,72,136,0.3)", borderColor: "#5878b8", cards: [
-    { id: "season", title: "Season", image: "/images/rainy-season.gif", fact: "Lots of rain falls!", bgColor: "#304888" },
+    { id: "season", title: "Season", image: "/images/rainy-weather.gif", fact: "Lots of rain falls!", bgColor: "#304888" },
     { id: "clothes", title: "Clothes", image: "/images/rainy-clothes.png", fact: "Carry an umbrella!", bgColor: "#405898" },
     { id: "food", title: "Food", image: "/images/rainy-food.gif", fact: "Hot tea and snacks!", bgColor: "#5068a8" },
     { id: "sound", title: "Sound", image: "/images/weather/rainy-sound.png", fact: "Pitter patter rain!", bgColor: "#203878", isSound: true, soundFile: "/sound/rainy.mp3", soundLabel: "Rain" },
