@@ -82,7 +82,7 @@ function playAnimalSound(word) {
   setTimeout(() => {
     audio.pause();
     audio.currentTime = 0;
-  }, 700); // stop after 1 second
+  }, 900); // stop after 1 second
 }
 
 export default function BubbleLetters() {
