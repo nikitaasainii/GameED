@@ -144,7 +144,7 @@ export default function BubbleLetters() {
             await saveGameProgress("Bubble Letters", shells + 1);
           }
           setFeedback(null);
-        }, 1800);
+        }, 2500);
       }
     } else {
       setFeedback("wrong");
