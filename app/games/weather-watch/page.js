@@ -17,7 +17,7 @@ const SEASONS = [
     { id: "sound", title: "Sound", image: "/images/weather/autumn-sound.png", fact: "Rustling leaves!", bgColor: "#b84000", isSound: true, soundFile: "/sound/autumn.mp3", soundLabel: "Rustling" },
   ]},
   { id: "winter", name: "Winter", color: "#1a6aaa", glowColor: "rgba(26,106,170,0.3)", borderColor: "#4a90d0", cards: [
-    { id: "season", title: "Season", image: "/images/winter-weather.mp4", fact: "It is cold and snowy!", bgColor: "#1a6aaa" },
+    { id: "season", title: "Season", image: "/images/winter-weather.gif", fact: "It is cold and snowy!", bgColor: "#1a6aaa" },
     { id: "clothes", title: "Clothes", image: "/images/winter-clothes.png", fact: "Wear thick coats!", bgColor: "#2a7abb" },
     { id: "food", title: "Food", image: "/images/winter-food.gif", fact: "Hot chocolate time!", bgColor: "#3a8acc" },
     { id: "sound", title: "Sound", image: "/images/winter-sound.gif", fact: "Winter wind blows!", bgColor: "#0a5a9a", isSound: true, soundFile: "/sound/winter.mp3", soundLabel: "Wind" },
