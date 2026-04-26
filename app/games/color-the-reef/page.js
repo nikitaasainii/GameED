@@ -21,7 +21,7 @@ const PALETTE = [
   "#ffffff", "#e8e8e8", "#a0a0a0", "#1a1a2e",
 ];
 
-const TOLERANCE = 32; // flood fill colour tolerance
+const TOLERANCE = 10; // flood fill colour tolerance
 
 // ─── FLOOD FILL ALGORITHM ────────────────────────────────────────────────────
 function hexToRgb(hex) {
@@ -47,6 +47,9 @@ function floodFill(imageData, startX, startY, fillColour, tolerance) {
   const targetR  = data[startIdx];
   const targetG  = data[startIdx + 1];
   const targetB  = data[startIdx + 2];
+
+  // Don't fill black outlines
+  if (targetR < 80 && targetG < 80 && targetB < 80) return imageData;
 
   // Don't fill if already that colour
   if (
