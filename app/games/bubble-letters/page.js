@@ -79,6 +79,10 @@ function playAnimalSound(word) {
   if (!soundSrc) return;
   const audio = new Audio(soundSrc);
   audio.play().catch(() => {});
+  setTimeout(() => {
+    audio.pause();
+    audio.currentTime = 0;
+  }, 1000); // stop after 1 second
 }
 
 export default function BubbleLetters() {
