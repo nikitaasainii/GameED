@@ -21,7 +21,7 @@ const PALETTE = [
   "#ffffff", "#e8e8e8", "#a0a0a0", "#1a1a2e",
 ];
 
-const TOLERANCE = 10; // flood fill colour tolerance
+const TOLERANCE = 20; // flood fill colour tolerance
 
 // ─── FLOOD FILL ALGORITHM ────────────────────────────────────────────────────
 function hexToRgb(hex) {
