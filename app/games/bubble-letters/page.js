@@ -53,16 +53,16 @@ const WORDS = [
 ];
 
 const ANIMAL_SOUNDS = {
-  CAT: "/sounds/meow.mp3",
-  DOG: "/sounds/bark.mp3",
-  HEN: "/sounds/hen.mp3",
-  PIG: "/sounds/pig.mp3",
-  OWL: "/sounds/owl.mp3",
-  FOX: "/sounds/fox.mp3",
-  RAT: "/sounds/rat.mp3",
-  BAT: "/sounds/bat.mp3",
-  ANT: "/sounds/ant.mp3",
-  BUG: "/sounds/bug.mp3",
+  CAT: "/sound/meow.mp3",
+  DOG: "/sound/bark.mp3",
+  HEN: "/sound/hen.mp3",
+  PIG: "/sound/pig.mp3",
+  OWL: "/sound/owl.mp3",
+  FOX: "/sound/fox.mp3",
+  RAT: "/sound/rat.mp3",
+  BAT: "/sound/bat.mp3",
+  ANT: "/sound/ant.mp3",
+  BUG: "/sound/bug.mp3",
 };
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
